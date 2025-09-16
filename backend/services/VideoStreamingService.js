@@ -250,8 +250,7 @@ class VideoStreamingService {
 
     // Gerar URLs de streaming otimizadas
     generateStreamingUrls(userLogin, folderName, fileName, serverId = null) {
-        const isProduction = process.env.NODE_ENV === 'production';
-        const wowzaHost = isProduction ? 'samhost.wcore.com.br' : '51.222.156.223';
+        const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio do Wowza
         const wowzaUser = 'admin';
         const wowzaPassword = 'FK38Ca2SuE6jvJXed97VMn';
         
@@ -259,14 +258,23 @@ class VideoStreamingService {
         const finalFileName = fileName.endsWith('.mp4') ? fileName : fileName.replace(/\.[^/.]+$/, '.mp4');
         
         return {
-            // URL direta do Wowza (seguindo padrão do video.php)
+            // URL direta do Wowza usando porta 6980 (admin/content)
             direct: `http://${wowzaUser}:${wowzaPassword}@${wowzaHost}:6980/content/${userLogin}/${folderName}/${finalFileName}`,
             
-            // URL HLS do Wowza (seguindo padrão do video.php)
-            hls: `http://${wowzaHost}:1935/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/playlist.m3u8`,
+            // URL HLS usando porta 80 conforme VHost.xml
+            hls: `http://${wowzaHost}:80/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/playlist.m3u8`,
+            
+            // URL HLS segura usando porta 443 conforme VHost.xml
+            hls_secure: `https://${wowzaHost}:443/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/playlist.m3u8`,
+            
+            // URL DASH usando porta 80 conforme VHost.xml
+            dash: `http://${wowzaHost}:80/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/manifest.mpd`,
+            
+            // URL RTSP usando porta 554 conforme VHost.xml
+            rtsp: `rtsp://${wowzaHost}:554/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}`,
             
             // URL VOD para download
-            vod: `http://${wowzaHost}:1935/vod/_definst_/mp4:${userLogin}/${folderName}/${finalFileName}/playlist.m3u8`,
+            vod: `http://${wowzaHost}:80/vod/_definst_/mp4:${userLogin}/${folderName}/${finalFileName}/playlist.m3u8`,
             
             // URL via backend (com autenticação)
             backend: `/content/${userLogin}/${folderName}/${finalFileName}`,

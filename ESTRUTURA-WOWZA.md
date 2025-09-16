@@ -69,11 +69,18 @@
 ### Para Transmissão ao Vivo (OBS)
 - **RTMP URL:** `rtmp://samhost.wcore.com.br:1935/{usuario}`
 - **Stream Key:** `{usuario}_live`
-- **HLS Playback:** `http://samhost.wcore.com.br:1935/{usuario}/{usuario}_live/playlist.m3u8`
+- **HLS Playback:** `http://stmv1.udicast.com:80/{usuario}/{usuario}_live/playlist.m3u8`
+- **HLS Seguro:** `https://stmv1.udicast.com:443/{usuario}/{usuario}_live/playlist.m3u8`
+- **DASH Playback:** `http://stmv1.udicast.com:80/{usuario}/{usuario}_live/manifest.mpd`
+- **RTSP Playback:** `rtsp://stmv1.udicast.com:554/{usuario}/{usuario}_live`
 
 ### Para Vídeos VOD
-- **HLS URL:** `http://samhost.wcore.com.br:1935/{usuario}/_definst_/mp4:{pasta}/{arquivo}/playlist.m3u8`
-- **VOD URL:** `http://samhost.wcore.com.br:1935/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}/playlist.m3u8`
+- **HLS URL:** `http://stmv1.udicast.com:80/{usuario}/_definst_/mp4:{pasta}/{arquivo}/playlist.m3u8`
+- **HLS Seguro:** `https://stmv1.udicast.com:443/{usuario}/_definst_/mp4:{pasta}/{arquivo}/playlist.m3u8`
+- **DASH URL:** `http://stmv1.udicast.com:80/{usuario}/_definst_/mp4:{pasta}/{arquivo}/manifest.mpd`
+- **RTSP URL:** `rtsp://stmv1.udicast.com:554/{usuario}/_definst_/mp4:{pasta}/{arquivo}`
+- **VOD HLS:** `http://stmv1.udicast.com:80/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}/playlist.m3u8`
+- **VOD DASH:** `http://stmv1.udicast.com:80/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}/manifest.mpd`
 
 ## 🛠️ Implementação
 

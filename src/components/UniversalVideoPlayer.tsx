@@ -98,7 +98,7 @@ const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
     // Para playlist, construir URL M3U8 do Wowza
     if (src.includes('/playlist/') && src.includes('_playlist.mp4')) {
       const userLogin = src.split('/')[0];
-      return `https://stmv1.udicast.com:1935/${userLogin}/${userLogin}/playlist.m3u8`;
+      return `http://stmv1.udicast.com:80/${userLogin}/${userLogin}/playlist.m3u8`;
     }
     
     // Para URLs de player com parâmetro playlist, construir URL M3U8
@@ -108,7 +108,7 @@ const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
       const playlistId = urlParams.get('playlist');
       
       if (userLogin) {
-        return `https://stmv1.udicast.com:1935/${userLogin}/${userLogin}/playlist.m3u8`;
+        return `http://stmv1.udicast.com:80/${userLogin}/${userLogin}/playlist.m3u8`;
       }
     }
 

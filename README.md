@@ -168,7 +168,10 @@ JWT_SECRET=sua_chave_secreta_super_segura_aqui
 
 ### WHMCS Integration
 - `POST /api/whmcs/webhook` - Webhook do WHMCS
-- `GET /api/whmcs/test` - Teste da integração
+- **HLS:** http://stmv1.udicast.com:80/samhost/{usuario}_live/playlist.m3u8
+- **HLS Seguro:** https://stmv1.udicast.com:443/samhost/{usuario}_live/playlist.m3u8
+- **DASH:** http://stmv1.udicast.com:80/samhost/{usuario}_live/manifest.mpd
+- **RTSP:** rtsp://stmv1.udicast.com:554/samhost/{usuario}_live
 
 ## 🔧 Como Executar
 
@@ -213,8 +216,11 @@ Após o deploy, o sistema estará disponível em:
 - **Health Check:** http://samhost.wcore.com.br:3001/api/health
 - **Player iFrame:** http://samhost.wcore.com.br:3001/api/player-port/iframe
 - **Streaming RTMP:** rtmp://samhost.wcore.com.br:1935/{usuario}
-- **Streaming HLS:** http://samhost.wcore.com.br:1935/{usuario}/{usuario}_live/playlist.m3u8
-- **Vídeos VOD:** http://samhost.wcore.com.br:1935/{usuario}/_definst_/mp4:{pasta}/{arquivo}/playlist.m3u8
+- **Streaming HLS:** http://stmv1.udicast.com:80/{usuario}/{usuario}_live/playlist.m3u8
+- **Streaming HLS Seguro:** https://stmv1.udicast.com:443/{usuario}/{usuario}_live/playlist.m3u8
+- **Streaming DASH:** http://stmv1.udicast.com:80/{usuario}/{usuario}_live/manifest.mpd
+- **Streaming RTSP:** rtsp://stmv1.udicast.com:554/{usuario}/{usuario}_live
+- **Vídeos VOD:** http://stmv1.udicast.com:80/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}/playlist.m3u8
 - **Configuração Wowza:** Cada usuário tem sua própria aplicação
 
 ## 🔗 Integração WHMCS

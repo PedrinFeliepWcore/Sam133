@@ -93,14 +93,17 @@ router.get('/obs-config', authMiddleware, async (req, res) => {
 
     // Configurar URLs baseadas no ambiente
     // SEMPRE usar domínio do servidor Wowza, NUNCA o domínio da aplicação
-    const streamingHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+    const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
     
     res.json({
       success: true,
       obs_config: {
-        rtmp_url: `rtmp://${streamingHost}:1935/${userLogin}`,
+        rtmp_url: `rtmp://${wowzaHost}:1935/${userLogin}`,
         stream_key: `${userLogin}_live`,
-        hls_url: `https://${streamingHost}:1935/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        hls_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        hls_secure_url: `https://${wowzaHost}:443/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        dash_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}_live/manifest.mpd`,
+        rtsp_url: `rtsp://${wowzaHost}:554/${userLogin}/${userLogin}_live`,
         max_bitrate: allowedBitrate,
         max_viewers: userConfig.espectadores,
         recording_enabled: userConfig.status_gravando === 'sim',

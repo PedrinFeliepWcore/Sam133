@@ -19,7 +19,7 @@ router.get('/iframe', async (req, res) => {
     // Construir URL baseado nos parâmetros (seguindo lógica do video.php)
     if (vodPath) {
       // VOD específico
-      const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+     const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
       
       // Garantir que o arquivo é MP4
       const vodPathParts = vodPath.split('/');
@@ -27,17 +27,17 @@ router.get('/iframe', async (req, res) => {
         const folderName = vodPathParts[0];
         const fileName = vodPathParts[1];
         const finalFileName = fileName.endsWith('.mp4') ? fileName : fileName.replace(/\.[^/.]+$/, '.mp4');
-        videoUrl = `https://${wowzaHost}:1935/vod/_definst_/mp4:${userLogin}/${folderName}/${finalFileName}/playlist.m3u8`;
+        videoUrl = `http://${wowzaHost}:80/vod/_definst_/mp4:${userLogin}/${folderName}/${finalFileName}/playlist.m3u8`;
       } else {
-        videoUrl = `https://${wowzaHost}:1935/vod/_definst_/mp4:${userLogin}/default/${vodPath}/playlist.m3u8`;
+        videoUrl = `http://${wowzaHost}:80/vod/_definst_/mp4:${userLogin}/default/${vodPath}/playlist.m3u8`;
       }
       
       title = `VOD: ${vodPath}`;
       isLive = false;
     } else if (stream) {
       // Stream ao vivo
-      const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
-      videoUrl = `https://${wowzaHost}:1935/samhost/${stream}/playlist.m3u8`;
+     const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+     videoUrl = `http://${wowzaHost}:80/samhost/${stream}/playlist.m3u8`;
       title = `Stream: ${stream}`;
       isLive = true;
     } else if (playlist) {
@@ -125,8 +125,8 @@ router.get('/iframe', async (req, res) => {
       }
     } else if (userLogin && userLogin !== 'usuario') {
       // Stream padrão do usuário
-      const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
-      videoUrl = `https://${wowzaHost}:1935/samhost/${userLogin}_live/playlist.m3u8`;
+     const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+     videoUrl = `http://${wowzaHost}:80/samhost/${userLogin}_live/playlist.m3u8`;
       title = `Stream: ${userLogin}`;
       isLive = true;
     }

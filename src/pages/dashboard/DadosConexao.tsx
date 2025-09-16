@@ -20,13 +20,16 @@ const DadosConexao: React.FC = () => {
 
   // Dados do servidor FMS/RTMP real
   const fmsData = {
-    servidor: 'stmv1.udicast.com',
+    servidor: 'stmv1.udicast.com', // Domínio do Wowza
     porta: '1935', // Porta RTMP correta
     aplicacao: 'samhost',
     rtmpUrl: 'rtmp://stmv1.udicast.com:1935/samhost',
     usuario: userLogin,
     streamKey: `${userLogin}_live`,
-    hlsUrl: `https://stmv1.udicast.com:1935/samhost/${userLogin}_live/playlist.m3u8`
+    hlsUrl: `http://stmv1.udicast.com:80/samhost/${userLogin}_live/playlist.m3u8`,
+    hlsSecureUrl: `https://stmv1.udicast.com:443/samhost/${userLogin}_live/playlist.m3u8`,
+    dashUrl: `http://stmv1.udicast.com:80/samhost/${userLogin}_live/manifest.mpd`,
+    rtspUrl: `rtsp://stmv1.udicast.com:554/samhost/${userLogin}_live`
   };
 
   const copyToClipboard = (text: string, label: string) => {
@@ -167,6 +170,11 @@ const DadosConexao: React.FC = () => {
             <p>• Também pode ser usado na ferramenta de migração de vídeos</p>
             <p>• Porta padrão: 21 (FTP não seguro)</p>
             <p>• Servidor: {ftpData.servidor}</p>
+            <p>• <strong>URLs de Streaming:</strong></p>
+            <p>&nbsp;&nbsp;- HLS: {fmsData.hlsUrl}</p>
+            <p>&nbsp;&nbsp;- HLS Seguro: {fmsData.hlsSecureUrl}</p>
+            <p>&nbsp;&nbsp;- DASH: {fmsData.dashUrl}</p>
+            <p>&nbsp;&nbsp;- RTSP: {fmsData.rtspUrl}</p>
           </div>
         </div>
       </div>

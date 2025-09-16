@@ -58,7 +58,8 @@ class VideoURLBuilder {
             // Garantir que o arquivo tem extensão
             const finalFileName = fileName.includes('.') ? fileName : `${fileName}.mp4`;
             
-            const url = `https://${domain}:${this.defaultPort}/${this.playScript}?login=${userLogin}&video=${sanitizedFolder}/${finalFileName}`;
+            // Usar porta 1443 para o player externo (conforme configuração atual)
+            const url = `https://${domain}:1443/${this.playScript}?login=${userLogin}&video=${sanitizedFolder}/${finalFileName}`;
             
             console.log(`🎥 URL construída: ${url}`);
             return url;
