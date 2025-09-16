@@ -100,15 +100,18 @@ router.get('/obs-config', authMiddleware, async (req, res) => {
 
     // Configurar URLs baseadas no ambiente
     // SEMPRE usar domínio do servidor Wowza, NUNCA o domínio da aplicação
-    const streamingHost = 'stmv1.udicast.com';
+    const wowzaHost = 'stmv1.udicast.com';
     
     // Resposta final
     res.json({
       success: true,
       obs_config: {
-        rtmp_url: `rtmp://${streamingHost}:1935/${userLogin}`,
+        rtmp_url: `rtmp://${wowzaHost}:1935/${userLogin}`,
         stream_key: `${userLogin}_live`,
-        hls_url: `http://${streamingHost}:1935/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        hls_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        hls_secure_url: `https://${wowzaHost}:443/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        dash_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}_live/manifest.mpd`,
+        rtsp_url: `rtsp://${wowzaHost}:554/${userLogin}/${userLogin}_live`,
         max_bitrate: allowedBitrate,
         max_viewers: userConfig.espectadores,
         recording_enabled: userConfig.status_gravando === 'sim',
@@ -583,14 +586,17 @@ router.post('/start', authMiddleware, async (req, res) => {
 
     // Configurar URLs baseadas no ambiente
     // SEMPRE usar domínio do servidor Wowza, NUNCA o domínio da aplicação
-    const streamingHost = 'stmv1.udicast.com';
+    const wowzaHost = 'stmv1.udicast.com';
 
     res.json({
       success: true,
       transmission: {
         id: transmissionId,
         titulo,
-        hls_url: `https://${streamingHost}:1935/${userLogin}/${userLogin}_live/playlist.m3u8`,
+        hls_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}/playlist.m3u8`,
+        hls_secure_url: `https://${wowzaHost}:443/${userLogin}/${userLogin}/playlist.m3u8`,
+        dash_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}/manifest.mpd`,
+        rtsp_url: `rtsp://${wowzaHost}:554/${userLogin}/${userLogin}`,
         wowza_stream_id: streamId,
         bitrate_usado: allowedBitrate,
         use_smil: true,
@@ -602,9 +608,12 @@ router.post('/start', authMiddleware, async (req, res) => {
       player_urls: {
         base_url: process.env.NODE_ENV === 'production' ? 'https://samhost.wcore.com.br:3001' : 'http://localhost:3001',
         iframe_url: `${process.env.NODE_ENV === 'production' ? 'https://samhost.wcore.com.br:3001' : 'http://localhost:3001'}/api/player-port/iframe?playlist=${playlist_id}&login=${userLogin}`,
-        hls_url: `https://${streamingHost}:1935/${userLogin}/${userLogin}/playlist.m3u8`,
-        smil_url: `https://${streamingHost}:1935/${userLogin}/${userLogin}/playlist.m3u8`,
-        playlist_m3u8: `https://${streamingHost}:1935/${userLogin}/${userLogin}/playlist.m3u8`
+        hls_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}/playlist.m3u8`,
+        hls_secure_url: `https://${wowzaHost}:443/${userLogin}/${userLogin}/playlist.m3u8`,
+        smil_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}/playlist.m3u8`,
+        playlist_m3u8: `http://${wowzaHost}:80/${userLogin}/${userLogin}/playlist.m3u8`,
+        dash_url: `http://${wowzaHost}:80/${userLogin}/${userLogin}/manifest.mpd`,
+        rtsp_url: `rtsp://${wowzaHost}:554/${userLogin}/${userLogin}`
       }
     });
   } catch (error) {

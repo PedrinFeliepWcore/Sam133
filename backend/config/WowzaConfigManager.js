@@ -819,7 +819,7 @@ class WowzaConfigManager {
 
     // Construir URLs corretas para nova estrutura
     buildVideoUrls(userLogin, folderName, fileName, serverId = null) {
-        const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+        const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio do Wowza
 
         // Garantir que arquivo é MP4
         const finalFileName = fileName.endsWith('.mp4') ? fileName : fileName.replace(/\.[^/.]+$/, '.mp4');
@@ -828,14 +828,26 @@ class WowzaConfigManager {
         const streamPath = `streaming/${userLogin}/${folderName}/${finalFileName}`;
 
         return {
-            // URL HLS usando aplicação específica do usuário
-            hls: `https://${wowzaHost}:1935/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/playlist.m3u8`,
+            // URL HLS usando porta 80 (HTTP) conforme VHost.xml
+            hls: `http://${wowzaHost}:80/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/playlist.m3u8`,
+            
+            // URL HLS segura usando porta 443 (HTTPS) conforme VHost.xml
+            hls_secure: `https://${wowzaHost}:443/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/playlist.m3u8`,
+            
+            // URL DASH usando porta 80 conforme VHost.xml
+            dash: `http://${wowzaHost}:80/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}/manifest.mpd`,
 
             // URL RTMP para transmissão
             rtmp: `rtmp://${wowzaHost}:1935/${userLogin}/${folderName}/${finalFileName}`,
+            
+            // URL RTSP conforme VHost.xml
+            rtsp: `rtsp://${wowzaHost}:554/${userLogin}/_definst_/mp4:${folderName}/${finalFileName}`,
 
-            // URL direta para download (via aplicação VOD)
-            direct: `https://${wowzaHost}:1935/vod/_definst_/mp4:${streamPath}/playlist.m3u8`,
+            // URL VOD usando porta 80 para HLS
+            vod_hls: `http://${wowzaHost}:80/vod/_definst_/mp4:${streamPath}/playlist.m3u8`,
+            
+            // URL VOD segura usando porta 443
+            vod_hls_secure: `https://${wowzaHost}:443/vod/_definst_/mp4:${streamPath}/playlist.m3u8`,
 
             // URL via proxy do backend
             proxy: `/content/${streamPath}`,
@@ -855,7 +867,7 @@ class WowzaConfigManager {
 
     // Construir URLs de transmissão ao vivo
     buildLiveStreamUrls(userLogin, serverId = null) {
-        const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+        const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio do Wowza
 
         return {
             // URL RTMP para OBS (usando aplicação específica do usuário)
@@ -864,8 +876,17 @@ class WowzaConfigManager {
             // Chave de transmissão
             streamKey: `${userLogin}_live`,
 
-            // URL HLS para visualização
-            hls: `https://${wowzaHost}:1935/${userLogin}/${userLogin}_live/playlist.m3u8`,
+            // URL HLS para visualização usando porta 80 (HTTP)
+            hls: `http://${wowzaHost}:80/${userLogin}/${userLogin}_live/playlist.m3u8`,
+            
+            // URL HLS segura usando porta 443 (HTTPS)
+            hls_secure: `https://${wowzaHost}:443/${userLogin}/${userLogin}_live/playlist.m3u8`,
+            
+            // URL DASH para visualização usando porta 80
+            dash: `http://${wowzaHost}:80/${userLogin}/${userLogin}_live/manifest.mpd`,
+            
+            // URL RTSP para players como VLC
+            rtsp: `rtsp://${wowzaHost}:554/${userLogin}/${userLogin}_live`,
 
             // URL de gravação
             recording_path: `${this.streamingBasePath}/${userLogin}/recordings/`,
