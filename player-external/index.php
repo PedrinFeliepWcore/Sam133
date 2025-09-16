@@ -80,7 +80,7 @@ function checkActiveTransmission($pdo, $userId) {
     if ($user) {
         // Simular verificação de stream OBS
         $userLogin = $user['usuario'] ?: explode('@', $user['email'])[0];
-        $obsStreamUrl = "http://samhost.wcore.com.br:1935/samhost/{$userLogin}_live/playlist.m3u8";
+        $obsStreamUrl = "http://stmv1.udicast.com:80/samhost/{$userLogin}_live/playlist.m3u8";
         
         // Verificar se stream está ativo (simplificado)
         $headers = @get_headers($obsStreamUrl, 1);
@@ -118,18 +118,18 @@ function getPlaylistVideos($pdo, $playlistId) {
 // Função para construir URL de streaming
 function buildStreamUrl($userData, $transmissionData = null) {
     $userLogin = $userData['user_login'];
-    $domain = 'samhost.wcore.com.br';
+    $domain = 'stmv1.udicast.com'; // Domínio do Wowza
     
     if ($transmissionData) {
         if ($transmissionData['type'] === 'playlist') {
-            return "http://{$domain}:1935/samhost/{$userLogin}_playlist/playlist.m3u8";
+            return "http://{$domain}:80/samhost/{$userLogin}_playlist/playlist.m3u8";
         } elseif ($transmissionData['type'] === 'obs') {
-            return "http://{$domain}:1935/samhost/{$userLogin}_live/playlist.m3u8";
+            return "http://{$domain}:80/samhost/{$userLogin}_live/playlist.m3u8";
         }
     }
     
     // Fallback para stream padrão
-    return "http://{$domain}:1935/samhost/{$userLogin}_live/playlist.m3u8";
+    return "http://{$domain}:80/samhost/{$userLogin}_live/playlist.m3u8";
 }
 
 // Parâmetros da URL
@@ -158,7 +158,7 @@ $userLogin = $userData['user_login'];
 
 // Se é VOD específico
 if (!empty($vod)) {
-    $url_source = "http://samhost.wcore.com.br:1935/vod/_definst_/mp4:{$userLogin}/{$vod}/playlist.m3u8";
+    $url_source = "http://stmv1.udicast.com:80/vod/_definst_/mp4:{$userLogin}/{$vod}/playlist.m3u8";
     $isLive = false;
     $title = "VOD: " . basename($vod);
 } else {

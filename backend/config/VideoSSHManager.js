@@ -949,13 +949,22 @@ class VideoSSHManager {
             const fileName = path.basename(finalPath);
             const relativePath = finalPath.replace('/usr/local/WowzaStreamingEngine/content/', '');
             
-            const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio
+            const wowzaHost = 'stmv1.udicast.com'; // SEMPRE usar domínio do Wowza
             
-            // URL direta do Wowza (HTTPS)
-            const directUrl = `https://${wowzaHost}:6980/content/${relativePath}`;
+            // URL direta do Wowza usando porta 6980 (admin/content)
+            const directUrl = `http://${wowzaHost}:6980/content/${relativePath}`;
             
-            // URL HLS correta com formato Wowza (HTTPS)
-            const hlsUrl = `https://${wowzaHost}:1935/vod/_definst_/mp4:${relativePath}/playlist.m3u8`;
+            // URL HLS usando porta 80 conforme VHost.xml
+            const hlsUrl = `http://${wowzaHost}:80/vod/_definst_/mp4:${relativePath}/playlist.m3u8`;
+            
+            // URL HLS segura usando porta 443 conforme VHost.xml
+            const hlsSecureUrl = `https://${wowzaHost}:443/vod/_definst_/mp4:${relativePath}/playlist.m3u8`;
+            
+            // URL DASH usando porta 80 conforme VHost.xml
+            const dashUrl = `http://${wowzaHost}:80/vod/_definst_/mp4:${relativePath}/manifest.mpd`;
+            
+            // URL RTSP usando porta 554 conforme VHost.xml
+            const rtspUrl = `rtsp://${wowzaHost}:554/vod/_definst_/mp4:${relativePath}`;
             
             // URL via proxy do backend
             const proxyUrl = `/content/${relativePath}`;
@@ -963,6 +972,9 @@ class VideoSSHManager {
             return {
                 direct: directUrl,
                 hls: hlsUrl,
+                hls_secure: hlsSecureUrl,
+                dash: dashUrl,
+                rtsp: rtspUrl,
                 proxy: proxyUrl,
                 ssh: `/api/videos-ssh/stream/${Buffer.from(finalPath).toString('base64')}`
             };

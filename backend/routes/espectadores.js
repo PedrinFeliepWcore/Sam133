@@ -154,13 +154,29 @@ router.get('/tempo-real', authMiddleware, async (req, res) => {
     );
 
     const espectadoresAtivos = espectadores.length;
-    const transmissaoAtiva = espectadoresAtivos > 0; // Simplificado
+    
+    // Verificar se há transmissão ativa real
+    const [transmissionRows] = await db.execute(
+      'SELECT COUNT(*) as count FROM transmissoes WHERE codigo_stm = ? AND status = "ativa"',
+      [userId]
+    );
+    const transmissaoAtiva = transmissionRows[0].count > 0;
 
     res.json({
       espectadoresAtivos,
       transmissaoAtiva,
       espectadores,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      wowza_info: {
+        domain: 'stmv1.udicast.com',
+        ports: {
+          rtmp: 1935,
+          hls: 80,
+          hls_secure: 443,
+          rtsp: 554,
+          admin: 555
+        }
+      }
     });
   } catch (err) {
     console.error('Erro ao buscar dados em tempo real:', err);

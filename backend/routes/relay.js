@@ -255,7 +255,7 @@ router.post('/start', authMiddleware, async (req, res) => {
 
     try {
       // Construir comando FFmpeg para relay
-      const outputUrl = `rtmp://samhost.wcore.com.br:1935/samhost/${userLogin}_relay`;
+      const outputUrl = `rtmp://stmv1.udicast.com:1935/samhost/${userLogin}_relay`;
       
       const ffmpegArgs = [
         '-i', relay_url,

@@ -76,13 +76,13 @@ try {
     
     if ($transmission) {
         $userLogin = $user['user_login'];
-        $response['stream_url'] = "http://samhost.wcore.com.br:1935/samhost/{$userLogin}_playlist/playlist.m3u8";
+        $response['stream_url'] = "http://stmv1.udicast.com:80/samhost/{$userLogin}_playlist/playlist.m3u8";
         $response['title'] = $transmission['titulo'];
         $response['playlist_name'] = $transmission['playlist_nome'];
     } else {
         // Verificar stream OBS (simulado)
         $userLogin = $user['user_login'];
-        $obsStreamUrl = "http://samhost.wcore.com.br:1935/samhost/{$userLogin}_live/playlist.m3u8";
+        $obsStreamUrl = "http://stmv1.udicast.com:80/samhost/{$userLogin}_live/playlist.m3u8";
         
         // Verificar se stream está ativo
         $headers = @get_headers($obsStreamUrl, 1);

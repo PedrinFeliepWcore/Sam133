@@ -62,7 +62,7 @@ server {
     index index.php index.html;
     
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.1-fmp.sock;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
@@ -107,6 +107,16 @@ https://playerv.samhost.wcore.com.br/?login=usuario&player=1
 - `contador` (opcional): Mostrar contador (true/false)
 - `compartilhamento` (opcional): Botões sociais (true/false)
 - `vod` (opcional): Vídeo específico (pasta/arquivo.mp4)
+
+### URLs de Streaming
+- **Playlist HLS:** `http://stmv1.udicast.com:80/samhost/{usuario}_playlist/playlist.m3u8`
+- **Playlist DASH:** `http://stmv1.udicast.com:80/samhost/{usuario}_playlist/manifest.mpd`
+- **OBS HLS:** `http://stmv1.udicast.com:80/samhost/{usuario}_live/playlist.m3u8`
+- **OBS DASH:** `http://stmv1.udicast.com:80/samhost/{usuario}_live/manifest.mpd`
+- **OBS RTSP:** `rtsp://stmv1.udicast.com:554/samhost/{usuario}_live`
+- **VOD HLS:** `http://stmv1.udicast.com:80/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}/playlist.m3u8`
+- **VOD DASH:** `http://stmv1.udicast.com:80/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}/manifest.mpd`
+- **VOD RTSP:** `rtsp://stmv1.udicast.com:554/vod/_definst_/mp4:{usuario}/{pasta}/{arquivo}`
 
 ### Exemplos de Uso
 

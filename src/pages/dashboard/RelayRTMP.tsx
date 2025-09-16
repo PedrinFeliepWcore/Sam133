@@ -549,7 +549,7 @@ const RelayRTMP: React.FC = () => {
             <h3 className="text-sm font-medium text-gray-500 mb-2">Seu Stream de Saída</h3>
             <div className="bg-gray-100 p-3 rounded-md">
               <p className="font-mono text-sm">
-                rtmp://samhost.wcore.com.br:1935/samhost/{user?.email?.split('@')[0] || 'usuario'}_live
+                rtmp://stmv1.udicast.com:1935/samhost/{user?.email?.split('@')[0] || 'usuario'}_live
               </p>
             </div>
             <p className="text-xs text-gray-500 mt-1">
@@ -561,11 +561,35 @@ const RelayRTMP: React.FC = () => {
             <h3 className="text-sm font-medium text-gray-500 mb-2">URL de Visualização (HLS)</h3>
             <div className="bg-gray-100 p-3 rounded-md">
               <p className="font-mono text-sm">
-                http://samhost.wcore.com.br:1935/samhost/{user?.email?.split('@')[0] || 'usuario'}_live/playlist.m3u8
+                http://stmv1.udicast.com:80/samhost/{user?.email?.split('@')[0] || 'usuario'}_live/playlist.m3u8
               </p>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               URL para players que suportam HLS
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 mb-2">URL DASH</h3>
+            <div className="bg-gray-100 p-3 rounded-md">
+              <p className="font-mono text-sm">
+                http://stmv1.udicast.com:80/samhost/{user?.email?.split('@')[0] || 'usuario'}_live/manifest.mpd
+              </p>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              URL para players que suportam MPEG-DASH
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 mb-2">URL RTSP</h3>
+            <div className="bg-gray-100 p-3 rounded-md">
+              <p className="font-mono text-sm">
+                rtsp://stmv1.udicast.com:554/samhost/{user?.email?.split('@')[0] || 'usuario'}_live
+              </p>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              URL para players como VLC
             </p>
           </div>
         </div>
@@ -580,6 +604,8 @@ const RelayRTMP: React.FC = () => {
             <li>• Apenas um relay pode estar ativo por vez</li>
             <li>• <strong>FFmpeg</strong> é usado para capturar e retransmitir o stream</li>
             <li>• Suporte a reconexão automática em caso de queda temporária</li>
+           <li>• <strong>Portas do Wowza:</strong> 1935 (RTMP), 80 (HLS/HTTP), 443 (HTTPS), 554 (RTSP)</li>
+           <li>• <strong>Formatos suportados:</strong> HLS (.m3u8), DASH (.mpd), RTSP</li>
           </ul>
         </div>
 

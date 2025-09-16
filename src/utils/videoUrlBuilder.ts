@@ -11,9 +11,11 @@ export interface VideoUrlParts {
 }
 
 export class VideoUrlBuilder {
-  private static readonly PRODUCTION_DOMAIN = 'stmv1.udicast.com';
-  private static readonly DEV_DOMAIN = 'stmv1.udicast.com';
+  private static readonly WOWZA_DOMAIN = 'stmv1.udicast.com';
   private static readonly PORT = '1443';
+  private static readonly HLS_PORT = '80';
+  private static readonly HLS_SECURE_PORT = '443';
+  private static readonly RTSP_PORT = '554';
 
   /**
    * Constrói URL direta baseada no padrão fornecido
@@ -72,7 +74,7 @@ export class VideoUrlBuilder {
    */
   private static getDomain(): string {
     // SEMPRE usar o domínio do servidor Wowza, NUNCA o domínio da aplicação
-    return this.DEV_DOMAIN; // stmv1.udicast.com
+    return this.WOWZA_DOMAIN; // stmv1.udicast.com
   }
 
   /**
@@ -115,6 +117,48 @@ export class VideoUrlBuilder {
   static buildDownloadUrl(videoPath: string): string {
     // Para download, usar a mesma URL direta
     return this.buildDirectUrl(videoPath);
+  }
+
+  /**
+   * Constrói URLs de streaming conforme portas do VHost.xml
+   */
+  static buildStreamingUrls(videoPath: string): {
+    hls: string;
+    hls_secure: string;
+    dash: string;
+    rtsp: string;
+    direct: string;
+  } {
+    const parts = this.parseVideoPath(videoPath);
+    if (!parts) {
+      return {
+        hls: '',
+        hls_secure: '',
+        dash: '',
+        rtsp: '',
+        direct: ''
+      };
+    }
+
+    const domain = this.getDomain();
+    const finalFileName = this.ensureMp4Extension(parts.fileName);
+
+    return {
+      // HLS usando porta 80 (HTTP) conforme VHost.xml
+      hls: `http://${domain}:${this.HLS_PORT}/vod/_definst_/mp4:${parts.userLogin}/${parts.folderName}/${finalFileName}/playlist.m3u8`,
+      
+      // HLS seguro usando porta 443 (HTTPS) conforme VHost.xml
+      hls_secure: `https://${domain}:${this.HLS_SECURE_PORT}/vod/_definst_/mp4:${parts.userLogin}/${parts.folderName}/${finalFileName}/playlist.m3u8`,
+      
+      // DASH usando porta 80 conforme VHost.xml
+      dash: `http://${domain}:${this.HLS_PORT}/vod/_definst_/mp4:${parts.userLogin}/${parts.folderName}/${finalFileName}/manifest.mpd`,
+      
+      // RTSP usando porta 554 conforme VHost.xml
+      rtsp: `rtsp://${domain}:${this.RTSP_PORT}/vod/_definst_/mp4:${parts.userLogin}/${parts.folderName}/${finalFileName}`,
+      
+      // URL direta do player (porta 1443)
+      direct: `https://${domain}:${this.PORT}/play.php?login=${parts.userLogin}&video=${parts.folderName}/${finalFileName}`
+    };
   }
 
   /**

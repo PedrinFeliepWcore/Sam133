@@ -861,7 +861,7 @@ router.get('/content/*', authMiddleware, async (req, res) => {
     const fileName = pathParts[2];
     
     // Buscar servidor do usuário dinamicamente
-    let wowzaHost = 'stmv1.udicast.com';
+    let wowzaHost = 'stmv1.udicast.com'; // Domínio do Wowza
     let wowzaPort = 6980;
     let wowzaUser = 'admin';
     let wowzaPassword = 'FK38Ca2SuE6jvJXed97VMn';
@@ -885,7 +885,7 @@ router.get('/content/*', authMiddleware, async (req, res) => {
         if (serverRows.length > 0) {
           const server = serverRows[0];
           // SEMPRE usar domínio, nunca IP
-          wowzaHost = 'stmv1.udicast.com';
+          wowzaHost = 'stmv1.udicast.com'; // Manter domínio do Wowza
           wowzaPassword = server.senha_root || wowzaPassword;
           console.log(`✅ Usando servidor dinâmico: ${wowzaHost} (Servidor ID: ${serverId})`);
         } else {
@@ -910,11 +910,11 @@ router.get('/content/*', authMiddleware, async (req, res) => {
     
     let wowzaUrl;
     if (isStreamFile) {
-      // Para streams HLS - verificar se arquivo MP4 existe, senão usar original
-      wowzaUrl = `https://${wowzaHost}:1935/vod/_definst_/mp4:${userLogin}/${folderName}/${finalFileName}/playlist.m3u8`;
+      // Para streams HLS, usar porta 80 conforme VHost.xml
+      wowzaUrl = `http://${wowzaHost}:80/vod/_definst_/mp4:${userLogin}/${folderName}/${finalFileName}/playlist.m3u8`;
     } else {
-      // Para arquivos diretos - tentar MP4 primeiro
-      wowzaUrl = `https://${wowzaHost}:6980/content/${userLogin}/${folderName}/${finalFileName}`;
+      // Para arquivos diretos, usar porta 6980 (admin/content)
+      wowzaUrl = `http://${wowzaHost}:6980/content/${userLogin}/${folderName}/${finalFileName}`;
     }
     
     console.log(`🔗 Redirecionando para Wowza dinâmico (${wowzaHost}): ${wowzaUrl}`);
@@ -941,8 +941,8 @@ router.get('/content/*', authMiddleware, async (req, res) => {
         if (finalFileName !== fileName) {
           console.log(`🔄 Tentando arquivo original: ${fileName}`);
           const originalUrl = isStreamFile ? 
-            `https://${wowzaHost}:1935/vod/_definst_/mp4:${userLogin}/${folderName}/${fileName}/playlist.m3u8` :
-            `https://${wowzaHost}:6980/content/${userLogin}/${folderName}/${fileName}`;
+            `http://${wowzaHost}:80/vod/_definst_/mp4:${userLogin}/${folderName}/${fileName}/playlist.m3u8` :
+            `http://${wowzaHost}:6980/content/${userLogin}/${folderName}/${fileName}`;
           
           const originalResponse = await fetch(originalUrl, {
             method: req.method,

@@ -101,7 +101,10 @@ pm2 startup
 
 ### URLs de Streaming
 - **RTMP:** rtmp://samhost.wcore.com.br:1935/samhost
-- **HLS:** http://samhost.wcore.com.br:1935/samhost/{usuario}_live/playlist.m3u8
+- **HLS:** http://stmv1.udicast.com:80/samhost/{usuario}_live/playlist.m3u8
+- **HLS Seguro:** https://stmv1.udicast.com:443/samhost/{usuario}_live/playlist.m3u8
+- **DASH:** http://stmv1.udicast.com:80/samhost/{usuario}_live/manifest.mpd
+- **RTSP:** rtsp://stmv1.udicast.com:554/samhost/{usuario}_live
 
 ## 📊 Monitoramento
 
